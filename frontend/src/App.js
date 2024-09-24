@@ -1,7 +1,13 @@
 // React Frontend - Tyler Rodgers
 
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; // Package for page navigation
 import React, { useEffect, useState } from 'react'; // Import React, useEffect for lifecycle management, useState for component state
-import axios from 'axios'; // Axios for HTTP requests
+import Header from './components/Header'; 
+import DashboardPage from './pages/DashboardPage';
+import TransactionsPage from './pages/TransactionsPage'; 
+import GoalsPage from './pages/GoalsPage';
+import SettingsPage from './pages/SettingsPage';
+import axios from 'axios'; // Import Axios for HTTP requests to the backend
 import './App.css'; 
 
 function App() {
@@ -14,17 +20,25 @@ function App() {
         setMessage(response.data); // Set the response message from backend
       })
       .catch((error) => {
-        console.error('There was an error fetching the data!', error);
+        console.error('There was an error fetching the data:', error);
       });
   }, []); // Empty array means it runs once when the component mounts
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Welcome to Student Saver!</h1>
-        <p>{message}</p>
-      </header>
-    </div>
+    <Router>
+      <Header /> {/* Render the Header component for navigation, will be on all pages */}
+
+      <div className="App">
+
+        {/* Define routes for the different pages */}
+        <Routes>
+          <Route path="/" element={<DashboardPage />} /> {/* Home & Default page */}
+          <Route path="/transactions" element={<TransactionsPage />} />
+          <Route path="/goals" element={<GoalsPage />} />
+          <Route path="/settings" element={<SettingsPage />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
