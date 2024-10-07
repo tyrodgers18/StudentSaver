@@ -1,6 +1,7 @@
 // TransactionsPage.js
 
 import React, { useState } from 'react';
+import axios from 'axios'; // HTTP requests
 import './TransactionsPage.css'; 
 
 const TransactionsPage = () => {
@@ -11,12 +12,17 @@ const TransactionsPage = () => {
     const [date, setDate] = useState('');
     const [note, setNote] = useState('');
 
+    // useState hook for error and success messages
+    const [message, setMessage] = useState('');
+    const [error, setError] = useState('');
+
     // Function to handle form submission
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault(); // Prevents the form from reloading the page
 
         // Create a transaction object from the form inputs
         const transaction = {
+            userId: '123',
             type,
             amount,
             category,
@@ -24,19 +30,34 @@ const TransactionsPage = () => {
             note
         };
 
-        console.log(transaction); // log the transaction (replace with backend call later)
+        console.log('Submitting transaction:', transaction);
 
-        // Clear form after submission
-        setAmount('');
-        setCategory('');
-        setDate('');
-        setNote('');
+        try {
+            // Make POST request to backend to add a new transaction
+            const response = await axios.post('http://localhost:3000/api/transactions/add', transaction);
+            setMessage('Transaction added succesfully!');
+            console.log(response.data);
+
+            // Clear form after submission
+            setAmount('');
+            setCategory('');
+            setDate('');
+            setNote('');
+        
+        } catch (error) {
+            setError('Error adding transaction. Try again.');
+            console.error('Error adding the transaction:', error);
+        }
     }
 
 
     return (
         <div className='transactions-page'>
             <h1>New Transaction</h1> 
+
+            {/* Display error or success message */}
+            {error && <p className='error-message'>{error}</p>}
+            {message && <p className='success-message'>{message}</p>}
 
             {/* Type selection buttons */}
             <div className='transaction-type-buttons'>
