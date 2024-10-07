@@ -12,13 +12,27 @@ const port = process.env.PORT || 3000; // Set the port to the value in env varia
 // Middleware
 app.use(bodyParser.json()); // This middleware parses JSON from incoming requests to use in routes
 
-// Enable CORS for all routes
-app.use(cors());
+// Enable CORS for the frontend (port 3001)
+app.use(cors({
+  origin: 'http://localhost:3001', // Allow requests from frontend running on localhost:3001
+}));
+
+app.use((req, res, next) => {
+  console.log(`Received request: ${req.method} ${req.url}`);
+  next();
+});
+
 
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URI) // Connect to MongoDB using the URI from .env
   .then(() => console.log('MongoDB connected...'))
   .catch(err => console.log('MongoDB connection error:', err));
+
+// Import the transaction route
+const transactionRoutes = require('./routes/transactions');
+
+// Use the transaction routes in the app
+app.use('/api/transactions', transactionRoutes); // This makes the transaction routes accessible at /api/transactions
 
 // Test Route
 // Basic route to test backend connection
