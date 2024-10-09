@@ -1,44 +1,69 @@
 /* Header.css */
 
 .Navigation-header {
-    background-color: #003366; /* Navy */
-    color: #ffffff; /* White text */
-    padding: 10px 20px; /* Padding */
-    text-align: center; /* Center align text */
-    position: fixed; 
-    top: 0;
-    width: 100%;
-    z-index: 1000;
+  background-color: #1a1a2e; /* Darker Navy */
+  color: #e0e0e0; /* Light Gray text */
+  padding: 10px 20px; /* Padding */
+  /* text-align: center; Center align text */
+  position: fixed; 
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  display: flex;
+  align-items: center; /* Align everything vertically in the center */
+  justify-content: center; /* Center everything inside the header */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+}
+
+.Header-title {
+  position: absolute;
+  left: 20px;
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #ffffff;
+  line-height: 1;
 }
 
 .Header-nav {
-    display: flex; /* Flexbox for horizontal alignment */
-    justify-content: center; /* Center align items */
-  }
+  display: flex; /* Flexbox for horizontal alignment */
+  justify-content: center; /* Center align items */
+}
 
-  .Header-nav-list {
-    list-style: none; /* Remove default list styling */
-    padding: 0; /* Remove padding */
-    margin: 0; /* Remove margin */
-    display: flex; /* Flexbox for horizontal list items */
-  }
+.Header-nav-list {
+  list-style: none; /* Remove default list styling */
+  padding: 0; /* Remove padding */
+  margin: 0; /* Remove margin */
+  display: flex; /* Flexbox for horizontal list items */
+}
 
 .Header-nav-item {
-    margin: 0 15px; /* Spacing between items */
+  margin: 0 25px; /* Increased spacing between items */
+  background-color: transparent; /* Ensure no background box */
 }
 
 .Header-nav-link {
-    color: #ffffff; /* White text */
-    text-decoration: none; /* Remove underline */
-    font-weight: bold; /* Bold text */
-  }
+  color: #e0e0e0; /* Light Gray text */
+  text-decoration: none; /* Remove underline */
+  font-weight: bold; /* Bold text */
+  font-size: 1.2em; /* Increase font size */
+  padding: 10px 15px; /* Padding for button spacing */
+  border-radius: 5px; /* Optional rounded corners */
+  background-color: transparent; /* Ensure background is transparent */
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth hover effect */
+}
 
 .Header-nav-link:hover {
-    text-decoration: underline; /* Underline on hover */
+  background-color: #0f3460; /* Darker background on hover */
+  color: #ffffff; /* White text on hover */
+}
+
+.Header-nav-link.active {
+  background-color: #0f3460; /* Indicate active page with a different background */
+  border-radius: 5px; /* Rounded corners to match */
 }
 
 body {
   margin: 0;
-  background-color: #282c34;
-  padding-top: 80px;
+  background-color: #121212; /* Dark background */
+  padding-top: 80px; /* To account for fixed header */
 }

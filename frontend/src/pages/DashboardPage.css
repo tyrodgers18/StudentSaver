@@ -1,0 +1,57 @@
+/* DashboardPage.css */
+
+/* Main container for the dashboard page */
+.dashboard-container {
+    padding: 20px;
+    max-width: 800px; /* Limit the width of the container */
+    margin: 0 auto; /* Center the container */
+    background-color: #f9f9f9; /* Light background for contrast */
+    border-radius: 10px; /* Round the corners of the container */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow effect */
+    margin-top: 20px; /* Add space above to avoid overlap with header */
+}
+
+h1 {
+    font-size: 2em; /* Larger font size for total balance */
+    color: #2c3e50; /* Dark color for contrast */
+    text-align: center; /* Center the title */
+    margin-bottom: 20px; /* Space below the total balance */
+}
+
+label {
+    display: block; /* Make label block to align nicely */
+    margin-bottom: 10px; /* Space below the label */
+    font-weight: bold; /* Bold the label text */
+}
+
+select {
+    padding: 10px; /* Padding for dropdown */
+    font-size: 1em; /* Consistent font size */
+    border: 1px solid #ccc; /* Light border */
+    border-radius: 5px; /* Rounded corners */
+    width: 100%; /* Full width for better UX */
+    margin-bottom: 20px; /* Space below the dropdown */
+}
+
+/* Transactions header styles */
+h2 {
+    font-size: 1.5em; /* Font size for transactions header */
+    color: #2c3e50; /* Darker color for header */
+    margin-bottom: 10px; /* Space below the header */
+    text-align: center; /* Center the header */
+}
+
+ul {
+    list-style-type: none; /* Remove default list styling */
+    padding: 0; /* Remove padding */
+}
+
+/* Transaction item styles */
+li {
+    background-color: #fff; /* White background for each transaction */
+    padding: 15px; /* Padding for transaction items */
+    margin: 10px 0; /* Space between transaction items */
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
+    color: #333;
+}
