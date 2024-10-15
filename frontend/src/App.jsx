@@ -6,7 +6,7 @@ import React from 'react';
 import Header from './components/Header'; 
 import DashboardPage from './pages/DashboardPage';
 import TransactionsPage from './pages/TransactionsPage'; 
-import GoalsPage from './pages/GoalsPage';
+import BudgetPage from './pages/BudgetPage';
 import SettingsPage from './pages/SettingsPage';
 // import axios from 'axios'; // Import Axios for HTTP requests to the backend
 import './App.css'; 
@@ -35,7 +35,7 @@ function App() {
         <Routes>
           <Route path="/" element={<DashboardPage />} /> {/* Home & Default page */}
           <Route path="/transactions" element={<TransactionsPage />} />
-          <Route path="/goals" element={<GoalsPage />} />
+          <Route path="/budget" element={<BudgetPage />} />
           <Route path="/settings" element={<SettingsPage />} />
         </Routes>
       </div>

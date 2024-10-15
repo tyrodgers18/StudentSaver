@@ -1,0 +1,52 @@
+/* BudgetPage.css */
+
+/* Main container for the budget page */
+.budget-page {
+    padding: 20px;
+    max-width: 600px; /* Limits width of container */
+    margin: 0 auto; /* Centers container horizontally */
+    background-color: white;
+    border-radius: 10px; /* Round the corners of the container */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Small shadow around container */
+    margin-top: 20px;
+}
+
+/* Page title */
+h1 {
+    text-align: center;
+    color: #2c3e50;
+}
+
+.budget-form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Form labels */
+label {
+    margin: 10px 0 5px;
+    color: #2c3e50;
+}
+
+/* Styling for inputs, dropdowns, and text areas */
+input {
+    padding: 10px;
+    margin-bottom: 15px; /* Add space below each input field */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+button {
+    padding: 10px; 
+    background-color: #3498db; /* Blue */
+    color: white; /* Button text color */
+    border: none; 
+    border-radius: 5px; 
+    font-size: 16px; 
+    cursor: pointer; /* Changes the cursor to a pointer when hovering */
+}
+
+  button:hover {
+    background-color: #2980b9; /* Darker when you hover over the button */
+}

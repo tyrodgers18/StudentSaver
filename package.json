@@ -4,5 +4,8 @@
     "cors": "^2.8.5",
     "react-router-dom": "^6.26.2",
     "react-scripts": "^5.0.1"
+  },
+  "devDependencies": {
+    "react-app-rewired": "^2.2.1"
   }
 }

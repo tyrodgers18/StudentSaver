@@ -64,6 +64,6 @@
 
 body {
   margin: 0;
-  background-color: #121212; /* Dark background */
+  background-color: #282c34; /* Dark background */
   padding-top: 80px; /* To account for fixed header */
 }
