@@ -1,0 +1,57 @@
+/* TrendsPage.css */
+
+.trends-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    color: #333;
+    padding: 10px;
+    background-color: #fff;
+}
+
+.trends-page h1 {
+    font-size: 1.8em; 
+    color: #4A90E2;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Dropdown menu styling */
+.trends-page select {
+    padding: 6px 12px;
+    font-size: 1em;
+    border: 1px solid #333;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    background-color: #fff;
+    color: #333;
+    outline: none;
+    cursor: pointer;
+    transition: box-shadow 0.3s ease;
+}
+
+/* Chart container */
+.trends-page .chart-container {
+    width: 100%;
+    max-width: 700px;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 5px;
+}
+
+.trends-page p {
+    font-size: 1em;
+    color: #2c3e50; /* red for error messages */
+}
+
+.trends-page .comparison-message {
+    margin-top: 20px;
+    font-size: 1.1em;
+    color: #2C3E50;
+    font-weight: 500;
+    text-align: center;
+    background-color: #fff;
+}

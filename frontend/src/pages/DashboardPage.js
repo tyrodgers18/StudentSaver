@@ -3,6 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './DashboardPage.css';
+import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
+
 
 function DashboardPage() {
 
@@ -12,12 +14,16 @@ function DashboardPage() {
     const[budgets, setBudgets] = useState([]); // Store the fetched budgets 
     const [error, setError] = useState('');
 
+
+
     useEffect(() => {
         console.log('DashboardPage rendered');
 
         // Get the current month to set as the default value for selectedMonth
         const currentMonth = new Date().toLocaleString('default', { month: 'long' }); 
         setSelectedMonth(currentMonth);
+
+
 
         // Retrieve a users transactions and budgets
         const fetchDashboardData = async () => {
@@ -26,7 +32,7 @@ function DashboardPage() {
                 const transactionsResponse = await axios.get('http://localhost:3000/api/transactions/123'); // GET request to retrieve transactions
                 setTransactions(transactionsResponse.data);
                 console.log('Fetched Transactions:', transactionsResponse.data);
-                calculateTotal(transactionsResponse.data); 
+                calculateTotal(transactionsResponse.data); // Get the current total based on transactions incomes/expenses
 
                 // Fetch budgets
                 const budgetResponse = await axios.get('http://localhost:3000/api/budget/123');
@@ -95,6 +101,26 @@ function DashboardPage() {
         return Math.min(percentage, 100);
     };
 
+    // Helper function to calculate the total spent for a specific budget category
+    const calculateSpentForCategory = (category) => {
+        // Get the current date and the start of the current month
+        const now = new Date();
+        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+         // Filter transactions that match the budget category, are expenses, and are in the current month
+         const categoryTransactions = transactions.filter(
+            (transaction) => 
+                transaction.category === category && 
+                transaction.type === 'expense' &&
+                new Date(transaction.date) >= startOfMonth // Ensure the transaction is in the current month
+        );
+
+        // Sum the amount of all transactions in that category
+        return categoryTransactions.reduce((total, transaction) => total + transaction.amount, 0);
+    }
+    
+
+    // Delete a budget from the dashboard and delete it in the backend
     const handleDeleteBudget = async (budgetId) => {
         try {
             await axios.delete(`http://localhost:3000/api/budget/${budgetId}`);
@@ -122,6 +148,58 @@ function DashboardPage() {
         { value: 'December', label: 'December' },
     ];
 
+    // const data = [
+    //     { name: 'Red', value: 130 },
+    //     { name: 'Blue', value: 50 },
+    //     { name: 'Yellow', value: 100 },
+    //   ];
+
+    // const COLORS = ['#FF6384', '#36A2EB', '#FFCE56'];
+
+    // const SimplePieChart = () => {
+    //   return (
+    //     <PieChart width={400} height={400}>
+    //       <Pie
+    //         data={data}
+    //         cx={200}
+    //         cy={200}
+    //         labelLine={false}
+    //         outerRadius={80}
+    //         fill="#8884d8"
+    //         dataKey="value"
+    //       >
+    //         {data.map((entry, index) => (
+    //           <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+    //         ))}
+    //       </Pie>
+    //       <Tooltip />
+    //       <Legend />
+    //     </PieChart>
+    //   );
+    // };
+
+
+    // Calculate expenses by category for the pie chart
+    const calculateExpensesByCategory = () => {
+        const expensesByCategory = transactions
+            .filter(transaction => transaction.type === 'expense')
+            .reduce((acc, transaction) => {
+                const { category, amount } = transaction;
+                if (!acc[category]) {
+                    acc[category] = 0;
+                }
+                acc[category] += parseFloat(amount);
+                return acc;
+            }, {});
+
+        return Object.keys(expensesByCategory).map(category => ({
+            name: category,
+            value: expensesByCategory[category],
+        }));
+    };
+
+    // const expenseData = calculateExpensesByCategory();
+
     return (
         <div className='dashboard-container'>
             <div className='budget-section'>
@@ -130,7 +208,7 @@ function DashboardPage() {
 
                 {budgets.length > 0 ? (
                     budgets.map((budget) => {
-                        const spent = 200; // Placeholder - calc actual spending per category
+                        const spent = calculateSpentForCategory(budget.category);
                         const percentage = calculateBudgetPercentage(spent, budget.budgetAmount);
 
                         return (
@@ -177,6 +255,12 @@ function DashboardPage() {
                     ))}
                 </ul>
             </div>
+
+            {/* Pie Chart Section */}
+            {/* <div className='chart-section'>
+                <h2>Expenses by Category</h2>
+                <SimplePieChart></SimplePieChart>
+            </div> */}
         </div>
     )
 }

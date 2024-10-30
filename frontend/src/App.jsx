@@ -8,6 +8,8 @@ import DashboardPage from './pages/DashboardPage';
 import TransactionsPage from './pages/TransactionsPage'; 
 import BudgetPage from './pages/BudgetPage';
 import SettingsPage from './pages/SettingsPage';
+import TrendsPage from './pages/TrendsPage';
+
 // import axios from 'axios'; // Import Axios for HTTP requests to the backend
 import './App.css'; 
 
@@ -37,6 +39,7 @@ function App() {
           <Route path="/transactions" element={<TransactionsPage />} />
           <Route path="/budget" element={<BudgetPage />} />
           <Route path="/settings" element={<SettingsPage />} />
+          <Route path='/trends' element={<TrendsPage />} />
         </Routes>
       </div>
     </Router>
