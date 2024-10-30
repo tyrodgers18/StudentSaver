@@ -4,6 +4,7 @@
 const express = require('express');
 const router = express.Router();
 const Transaction = require('../models/Transaction'); // Import the Transaction model
+const Budget = require('../models/Budget');
 
 
 // POST Route to add a new transaction
@@ -27,6 +28,24 @@ router.post('/add', async (req, res) => { // POST endpoint
 
     // Save the transaction to the MongoDB database
     await transaction.save();
+
+    // Update budget if transaction is an expense and matches a budget
+    if (type === 'expense') {
+      // Find the corresponding budget for this category and user
+      const budget = await Budget.findOne({
+        userId: userId,
+        category: category,
+        startDate: { $lte: new Date() }, // Start date should be in the past or today
+        endDate: { $gte: new Date() } // End date should be in the future or today
+      });
+
+      if (budget) {
+        // Update the 'spent' value by adding the transaction amount
+        budget.spent += amount;
+        await budget.save();
+      }
+
+    }
 
     // Upon success respond with the created transaction and a 201 status
     res.status(201).json(transaction);

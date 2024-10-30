@@ -47,3 +47,17 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
+
+
+const cron = require('node-cron'); // Scheduling library
+const Budget = require('./models/Budget');
+
+// Reset 'spent' to 0 at the beginning of each month
+cron.schedule('0 0 1 * *', async () => { // 0 0 (00:00 midnight), 1 (first day of the month), * * (Every month, Every day)
+  try {
+      await Budget.updateMany({}, { spent: 0 });
+      console.log('Budgets reset for the new month');
+  } catch (error) {
+      console.error('Error resetting budgets:', error);
+  }
+});
