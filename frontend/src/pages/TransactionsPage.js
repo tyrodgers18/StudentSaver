@@ -79,7 +79,7 @@ const TransactionsPage = () => {
             {/* Form for transaction input */}
             <form className='transaction-form' onSubmit={handleSubmit}> 
                 {/* Input field for transaction amount */}
-                <label htmlFor='amount'>Amount:</label>
+                <label htmlFor='amount'>Amount ($):</label>
                 <input
                     type = 'number'
                     id = 'amount'

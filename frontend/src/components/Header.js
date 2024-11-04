@@ -24,6 +24,9 @@ function Header() {
                         <NavLink to ='/budget' className='Header-nav-link' activeClassName='active'>Budget</NavLink>
                     </li>
                     <li className='Header-nav-item'>
+                        <NavLink to ='/savings' className='Header-nav-link' activeClassName='active'>Savings</NavLink>
+                    </li>
+                    <li className='Header-nav-item'>
                         <NavLink to ='/settings' className='Header-nav-link' activeClassName='active'>Settings</NavLink>
                     </li>
                 </ul>

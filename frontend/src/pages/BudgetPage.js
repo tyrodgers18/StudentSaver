@@ -64,7 +64,7 @@ function BudgetPage() {
                 />
 
                 {/* Input field for budget amount */}
-                <label htmlFor='budgetAmount'>Budget Amount:</label>
+                <label htmlFor='budgetAmount'>Budget Amount ($):</label>
                 <input
                     type='number'
                     id='budgetAmount'

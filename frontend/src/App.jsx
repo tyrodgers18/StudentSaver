@@ -9,6 +9,7 @@ import TransactionsPage from './pages/TransactionsPage';
 import BudgetPage from './pages/BudgetPage';
 import SettingsPage from './pages/SettingsPage';
 import TrendsPage from './pages/TrendsPage';
+import SavingsPage from './pages/SavingsPage';
 
 // import axios from 'axios'; // Import Axios for HTTP requests to the backend
 import './App.css'; 
@@ -40,6 +41,7 @@ function App() {
           <Route path="/budget" element={<BudgetPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path='/trends' element={<TrendsPage />} />
+          <Route path='/savings' element={<SavingsPage />} />
         </Routes>
       </div>
     </Router>
