@@ -31,11 +31,15 @@ mongoose.connect(process.env.MONGO_URI) // Connect to MongoDB using the URI from
 const transactionRoutes = require('./routes/transactions');
 // Import the budget route
 const budgetRoutes = require('./routes/budgetRoutes');
+// Import the savings routes
+const savingsRoutes = require('./routes/savingsRoutes');
 
 // Use the transaction routes in the app
 app.use('/api/transactions', transactionRoutes); // This makes the transaction routes accessible at /api/transactions
 // Use the budget routes in the app
 app.use('/api/budget', budgetRoutes);
+// Use the savings routes in the app
+app.use('/api/savings', savingsRoutes);
 
 // Test Route
 // Basic route to test backend connection
