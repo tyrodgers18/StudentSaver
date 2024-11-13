@@ -9,10 +9,11 @@ import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 function DashboardPage() {
 
     const[transactions, setTransactions] = useState([]); // Store the fetched transactions from the backend
-    const[total, setTotal] = useState(0); // Store the calculate total money of a user
+    const[total, setTotal] = useState(0); // Store the calculated total money of a user
     const[selectedMonth, setSelectedMonth] = useState(''); // State for selected month
     const[budgets, setBudgets] = useState([]); // Store the fetched budgets 
-    const [error, setError] = useState('');
+    const[savingsGoals, setSavingsGoals] = useState([]); // Store the savings goals
+    const[error, setError] = useState('');
 
 
 
@@ -22,8 +23,6 @@ function DashboardPage() {
         // Get the current month to set as the default value for selectedMonth
         const currentMonth = new Date().toLocaleString('default', { month: 'long' }); 
         setSelectedMonth(currentMonth);
-
-
 
         // Retrieve a users transactions and budgets
         const fetchDashboardData = async () => {
@@ -38,6 +37,11 @@ function DashboardPage() {
                 const budgetResponse = await axios.get('http://localhost:3000/api/budget/123');
                 setBudgets(budgetResponse.data);
                 console.log('Fetched Budgets:', budgetResponse.data);
+
+                // Fetch savings goals
+                const savingsResponse = await axios.get('http://localhost:3000/api/savings/123');
+                setSavingsGoals(savingsResponse.data);
+                console.log('Fetched Savings Goals:', savingsResponse.data);
 
             } catch (error) {
                 setError('Error fetching data');
@@ -96,9 +100,16 @@ function DashboardPage() {
         });
     };
 
+    // Calculate a budgets percentage
     const calculateBudgetPercentage = (spent, budget) => {
         const percentage = (spent / budget) * 100;
         return Math.min(percentage, 100);
+    };
+
+    // Calculate a savings goals percentage
+    const calculateSavingsPercentage = (currentAmount, targetAmount) => {
+        const percentage = (currentAmount / targetAmount) * 100;
+        return Math.min(percentage, 100)
     };
 
     // Helper function to calculate the total spent for a specific budget category
@@ -128,6 +139,17 @@ function DashboardPage() {
         } catch (error) {
             console.error('Error deleting budget:', error);
             setError('Error deleting budget');
+        }
+    };
+
+    // Delete a savings goal from the dashboard and backend
+    const handleDeleteSavingsGoal = async (goalId) => {
+        try {
+            await axios.delete(`http://localhost:3000/api/savings/${goalId}`);
+            setSavingsGoals(savingsGoals.filter(goal => goal._id !== goalId));
+        } catch (error) {
+            console.error('Error deleting savings goal:', error);
+            setError('Error deleting savings goal');
         }
     };
 
@@ -202,6 +224,7 @@ function DashboardPage() {
 
     return (
         <div className='dashboard-container'>
+            {/* Budget section */}
             <div className='budget-section'>
                 <h2>Budget Overview</h2>
                 {error && <p className='error-message'>{error}</p>}
@@ -233,6 +256,7 @@ function DashboardPage() {
                 )}
             </div>
 
+            {/* Transactions section */}
             <div className='transactions-section'> 
                 <h1>Total Balance: ${total.toFixed(2)}</h1> {/* Two decimal places */}
             
@@ -256,12 +280,42 @@ function DashboardPage() {
                 </ul>
             </div>
 
+            {/* Savings section */}
+            <div className='savings-section'>
+                <h2>Savings Goals</h2>
+                {savingsGoals.length > 0 ? (
+                    savingsGoals.map((goal) => {
+                        const progress = calculateSavingsPercentage(goal.currentAmount, goal.targetAmount);
+                        return(
+                            <div className='savings-item' key={goal.id}>
+                                <h3>{goal.goalName}</h3>
+                                <p>${goal.currentAmount} / {goal.targetAmount}</p>
+                                <div className='progress-bar'>
+                                    <div
+                                        className='progress-bar-fill'
+                                        style={{ width: `${progress}%` }}
+                                    />
+                                </div>
+                                <button className='delete-savings-btn' onClick={() => handleDeleteSavingsGoal(goal._id)}>
+                                    ❌
+                                </button>
+                            </div>
+                        );
+                    })
+                ) : (
+                    <p>No savings goals to display</p>
+                )}
+            </div>
+
             {/* Pie Chart Section */}
             {/* <div className='chart-section'>
                 <h2>Expenses by Category</h2>
                 <SimplePieChart></SimplePieChart>
             </div> */}
         </div>
+
+
+        
     )
 }
 
