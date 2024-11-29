@@ -52,4 +52,27 @@ router.delete('/:goalId', async (req, res) => {
     }
 });
 
+// PUT route to update the savings goal's current amount
+router.put('/:goalId', async (req, res) => {
+    const { goalId } = req.params;
+    const { currentAmount } = req.body;
+
+    try {
+        const updatedGoal = await Savings.findByIdAndUpdate(
+            goalId,
+            { currentAmount },
+            { new: true } // Return the updated value
+        );
+
+        if (!updatedGoal) {
+            return res.status(404).json({message: 'Savings goal not found' });
+        }
+
+        res.status(200).json(updatedGoal);
+    } catch (error) {
+        console.error('Error updating savings goal:', error);
+        res.status(500).json({ message: 'Error updating savings goal '});
+    }
+});
+
 module.exports = router;

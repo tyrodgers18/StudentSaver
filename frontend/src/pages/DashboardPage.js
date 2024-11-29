@@ -2,9 +2,11 @@
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Modal from 'react-modal';
 import './DashboardPage.css';
 import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 
+Modal.setAppElement('#root');
 
 function DashboardPage() {
 
@@ -13,6 +15,11 @@ function DashboardPage() {
     const[selectedMonth, setSelectedMonth] = useState(''); // State for selected month
     const[budgets, setBudgets] = useState([]); // Store the fetched budgets 
     const[savingsGoals, setSavingsGoals] = useState([]); // Store the savings goals
+    const[isAddFundsModalOpen, setIsAddFundsModalOpen] = useState(false);
+    const[selectedGoal, setSelectedGoal] = useState('');
+    const[fundsAmount, setFundsAmount] = useState('');
+    
+    const[showTooltip, setShowTooltip] = useState(false); 
     const[error, setError] = useState('');
 
 
@@ -153,6 +160,85 @@ function DashboardPage() {
         }
     };
 
+    const handleAddFundsClick = () => {
+        setIsAddFundsModalOpen(true);
+    };
+
+    const handleModalClose = () => {
+        setIsAddFundsModalOpen(false);
+        setSelectedGoal('');
+        setFundsAmount('');
+    };
+
+    const handleAddFundsSubmit = async () => {
+        // If both fields of the form are not entered, alert user
+        if (!selectedGoal || !fundsAmount) {
+            alert('Please select a goal and enter an amount.');
+            return;
+        }
+
+        try {
+            console.log('Submitting funds:', {
+                selectedGoal,
+                fundsAmount,
+            });
+
+            // Find the users selected goal from the existing list
+            const goalToUpdate = savingsGoals.find(goal => goal.goalName === selectedGoal);
+
+            if (goalToUpdate) {
+                console.log('Found Goal to update:', goalToUpdate);
+
+                const parsedFundsAmount = parseFloat(fundsAmount);
+
+                // Make sure the user has enough balance to move funds
+                if(parsedFundsAmount > total) {
+                    alert('Insufficient funds. You cannot add more than your total balance.');
+                    return;
+                }
+
+                // Calculate the updated amount
+                const updatedAmount = goalToUpdate.currentAmount + parseFloat(fundsAmount);
+
+                // Create the updated goal object
+                const updatedGoal = {
+                    ...goalToUpdate,
+                    currentAmount: updatedAmount,
+                };
+
+                console.log('Updated Goal:', updatedGoal);
+
+                // Use PUT to send the updated goal to the backend 
+                const response = await axios.put(
+                    `http://localhost:3000/api/savings/${goalToUpdate._id}`, 
+                    { currentAmount: updatedAmount }
+                );
+
+                // Update the state to show the changes
+                setSavingsGoals(savingsGoals.map(goal => 
+                    goal._id === updatedGoal._id ? {...goal, currentAmount: updatedAmount } : goal
+                ));
+
+                // Subtract the funds from the total balance
+                const newTotal = total - parsedFundsAmount;
+                console.log(`Subtracting $${parsedFundsAmount} from total balance. New total: $${newTotal}`);
+                setTotal(newTotal);
+
+                console.log('Backend response:', response.data);
+                // alert('Funds added successfully!');
+                handleModalClose();
+            }
+            else {
+                console.log('Goaal not found!');
+                alert('Selected goal not found. please try again')
+            }
+        } catch (error) {
+            console.error('Error updating funds:', error);
+            alert('An error occured while updating funds. Please try again')
+        }
+    };
+
+
     // Prepare list of months for dropdown
     const months = [
         { value: '', label: 'All Months' },
@@ -222,6 +308,7 @@ function DashboardPage() {
 
     // const expenseData = calculateExpensesByCategory();
 
+
     return (
         <div className='dashboard-container'>
             {/* Budget section */}
@@ -283,11 +370,22 @@ function DashboardPage() {
             {/* Savings section */}
             <div className='savings-section'>
                 <h2>Savings Goals</h2>
+
+                <div className='savings-buttons'>
+                    <button className='add-funds-btn' onClick={handleAddFundsClick}> {/* Sets isAddFundsModalOpen to true */}
+                        💰 Add Funds
+                    </button>
+
+                    <button className='set-priority-btn'>
+                        ⭐ Set Priority
+                    </button>   
+                </div>
+
                 {savingsGoals.length > 0 ? (
                     savingsGoals.map((goal) => {
                         const progress = calculateSavingsPercentage(goal.currentAmount, goal.targetAmount);
                         return(
-                            <div className='savings-item' key={goal.id}>
+                            <div className='savings-item' key={goal._id}>
                                 <h3>{goal.goalName}</h3>
                                 <p>${goal.currentAmount} / {goal.targetAmount}</p>
                                 <div className='progress-bar'>
@@ -307,6 +405,37 @@ function DashboardPage() {
                 )}
             </div>
 
+            {isAddFundsModalOpen && (
+            <>
+                <div className="modal-overlay" onClick={handleModalClose}></div>
+                <div className="modal">
+                    <h3>Add Funds</h3>
+                    <form onSubmit={(e) => { e.preventDefault(); handleAddFundsSubmit(); }}>
+                        <select
+                            id="goal-select"
+                            value={selectedGoal}
+                            onChange={(e) => setSelectedGoal(e.target.value)}
+                        >
+                            <option value="">-- Select a Goal --</option>
+                            {savingsGoals.map(goal => (
+                                <option key={goal._id} value={goal.goalName}>{goal.goalName}</option>
+                            ))}
+                        </select>
+                        <label htmlFor="funds-input">Amount to Add:</label>
+                        <input 
+                            type="number" 
+                            id="funds-input" 
+                            value={fundsAmount} 
+                            onChange={(e) => setFundsAmount(e.target.value)}
+                        />
+                        <button onClick={handleAddFundsSubmit}>Submit</button>
+                    </form>
+                    <button onClick={handleModalClose}>Close</button>
+                </div>
+            </>
+            )}
+
+
             {/* Pie Chart Section */}
             {/* <div className='chart-section'>
                 <h2>Expenses by Category</h2>
@@ -314,7 +443,7 @@ function DashboardPage() {
             </div> */}
         </div>
 
-
+        
         
     )
 }

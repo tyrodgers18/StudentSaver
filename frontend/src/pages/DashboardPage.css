@@ -99,6 +99,29 @@
     font-size: 1.2em;
 }
 
+.savings-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.add-funds-btn, .set-priority-btn {
+    padding: 7px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+}
+
+.add-funds-btn {
+    background-color: #4CAF50; /* Green for add funds */
+    color: white;
+}
+
+.set-priority-btn {
+    background-color: #2196F3; /* Blue for set priority */
+    color: white;
+}
+
+
 .transactions-section {
     flex: 2; /* Take up more space for the transactions section */
     background-color: #ffffff;
@@ -151,3 +174,63 @@
     box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
     color: #333;
 }
+
+.modal h3 {
+    color: #333;
+    margin-bottom: 15px;
+    size: 1.5em;
+}
+
+#goal-select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    font-size: 1em;
+    color: #333; /* Text color */
+    text-align: center;
+}
+
+#funds-input {
+    width: 90%; /* Full width */
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    color: #333;
+}
+
+.modal button {
+    padding: 10px 15px; 
+    margin: 8px;
+    font-size: 1em;
+}
+
+.modal {
+    position: fixed;
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%); 
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    z-index: 1000; /* Make it appear on top */
+    width: 300px; 
+  }
+  
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    z-index: 999; /* Below modal */
+  }
+
+
+ 
