@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Modal from 'react-modal';
 import './DashboardPage.css';
-import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
+// import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 
 Modal.setAppElement('#root');
 
@@ -16,10 +16,12 @@ function DashboardPage() {
     const[budgets, setBudgets] = useState([]); // Store the fetched budgets 
     const[savingsGoals, setSavingsGoals] = useState([]); // Store the savings goals
     const[isAddFundsModalOpen, setIsAddFundsModalOpen] = useState(false);
+    const[isPriorityModalOpen, setIsPriorityModalOpen] = useState(false);
     const[selectedGoal, setSelectedGoal] = useState('');
     const[fundsAmount, setFundsAmount] = useState('');
+    const [priorityGoal, setPriorityGoal] = useState('');
     
-    const[showTooltip, setShowTooltip] = useState(false); 
+    // const[showTooltip, setShowTooltip] = useState(false); 
     const[error, setError] = useState('');
 
 
@@ -164,11 +166,19 @@ function DashboardPage() {
         setIsAddFundsModalOpen(true);
     };
 
+    const handleSetPriorityClick = () => {
+        setIsPriorityModalOpen(true);
+    };
+
     const handleModalClose = () => {
         setIsAddFundsModalOpen(false);
         setSelectedGoal('');
         setFundsAmount('');
     };
+
+    const handlePriorityModalClose = () => {
+        setIsPriorityModalOpen(false);
+    }
 
     const handleAddFundsSubmit = async () => {
         // If both fields of the form are not entered, alert user
@@ -238,6 +248,24 @@ function DashboardPage() {
         }
     };
 
+    const handleSetPrioritySubmit = async () => {
+        if(!priorityGoal) {
+            alert('Please select a goal to set as a priority.');
+            return
+        }
+
+        try {
+            // Send selected priority goal to the backend
+            // const response = await fetch() 
+
+        } catch (error) {
+            console.error('Error setting priority goal:', error);
+            alert('An error occurred while setting the priority goal.');
+        }
+
+        handlePriorityModalClose();
+    };
+
 
     // Prepare list of months for dropdown
     const months = [
@@ -288,23 +316,23 @@ function DashboardPage() {
 
 
     // Calculate expenses by category for the pie chart
-    const calculateExpensesByCategory = () => {
-        const expensesByCategory = transactions
-            .filter(transaction => transaction.type === 'expense')
-            .reduce((acc, transaction) => {
-                const { category, amount } = transaction;
-                if (!acc[category]) {
-                    acc[category] = 0;
-                }
-                acc[category] += parseFloat(amount);
-                return acc;
-            }, {});
+    // const calculateExpensesByCategory = () => {
+    //     const expensesByCategory = transactions
+    //         .filter(transaction => transaction.type === 'expense')
+    //         .reduce((acc, transaction) => {
+    //             const { category, amount } = transaction;
+    //             if (!acc[category]) {
+    //                 acc[category] = 0;
+    //             }
+    //             acc[category] += parseFloat(amount);
+    //             return acc;
+    //         }, {});
 
-        return Object.keys(expensesByCategory).map(category => ({
-            name: category,
-            value: expensesByCategory[category],
-        }));
-    };
+    //     return Object.keys(expensesByCategory).map(category => ({
+    //         name: category,
+    //         value: expensesByCategory[category],
+    //     }));
+    // };
 
     // const expenseData = calculateExpensesByCategory();
 
@@ -376,7 +404,7 @@ function DashboardPage() {
                         💰 Add Funds
                     </button>
 
-                    <button className='set-priority-btn'>
+                    <button className='set-priority-btn' onClick={handleSetPriorityClick}> {/* Sets isSetPriorityOpen to true*/}
                         ⭐ Set Priority
                     </button>   
                 </div>
@@ -433,6 +461,33 @@ function DashboardPage() {
                     <button onClick={handleModalClose}>Close</button>
                 </div>
             </>
+            )}
+
+            {isPriorityModalOpen && (
+                <div className='modal-overlay' onClick={handlePriorityModalClose}>
+                <div className='priority-modal' onClick={(e) => e.stopPropagation()}>
+                    <div className='priority-content'>
+                        <h2>Set Priority</h2>
+                        <form onSubmit={(e) => { e.preventDefault(); handleSetPrioritySubmit(); }}>
+                            <div className='form-group'>
+                                <label htmlFor='goal-priority'>Select Goal:</label>
+                                <select 
+                                    id="goal-priority" 
+                                    value={priorityGoal}
+                                    onChange={(e) => setPriorityGoal(e.target.value)}
+                                >
+                                    <option value="">-- Select a Goal --</option>
+                                    {savingsGoals.map((goal) => (
+                                        <option key={goal._id} value={goal.goalName}>{goal.goalName}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <button onClick={handleSetPrioritySubmit}>Submit</button>
+                        </form>
+                        <button onClick={handlePriorityModalClose}>Close</button>
+                    </div>
+                </div>
+                </div>
             )}
 
 
